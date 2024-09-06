@@ -1,0 +1,9 @@
+// I2C 설정
+#define I2C_DRIVER I2CD1
+#define I2C1_SCL_PIN   GP5
+#define I2C1_SDA_PIN   GP4
+
+// 포인팅 장치 설정
+//#define PIMORONI_TRACKBALL_ADDRESS
+//#define POINTING_DEVICE_ENABLE
+//#define POINTING_DEVICE_ROTARY_ENCODER
