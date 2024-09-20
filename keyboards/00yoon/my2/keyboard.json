@@ -15,6 +15,13 @@
         "cols": ["GP6", "GP7", "GP8", "GP9"],
         "rows": ["GP10", "GP11", "GP12", "GP13", "GP14"]
     },
+    "encoder": {
+        "rotary": [
+            {"pin_a": "GP27", "pin_b": "GP28"},
+            {"pin_a": "GP22", "pin_b": "GP26"},
+            {"pin_a": "GP20", "pin_b": "GP21"}
+        ]
+    },
     "processor": "RP2040",
     "url": "",
     "usb": {

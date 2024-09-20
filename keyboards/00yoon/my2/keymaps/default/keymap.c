@@ -64,8 +64,35 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 bool process_mouse(report_mouse_t *mouse_report) {
+#ifdef CONSOLE_ENABLE
     uprintf("Mouse X: %d, Y: %d, V: %d, H: %d\n", 
             mouse_report->x, mouse_report->y, 
             mouse_report->v, mouse_report->h);
+#endif             
     return true;
+}
+
+bool encoder_update_user(uint8_t index, bool clockwise) {
+    if (index == 0) { /* First encoder */
+        if (clockwise) {
+            tap_code(KC_PGDN);
+        } else {
+            tap_code(KC_PGUP);
+        }
+    } else 
+    if (index == 1) { /* Second encoder */
+        if (clockwise) {
+            tap_code(KC_PGDN);
+        } else {
+            tap_code(KC_PGUP);
+        }
+    } else 
+    if (index == 2) { /* Second encoder */
+        if (clockwise) {
+            tap_code(KC_PGDN);
+        } else {
+            tap_code(KC_PGUP);
+        }
+    }
+    return false;
 }
