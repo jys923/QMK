@@ -75,23 +75,23 @@ bool process_mouse(report_mouse_t *mouse_report) {
 bool encoder_update_user(uint8_t index, bool clockwise) {
     if (index == 0) { /* First encoder */
         if (clockwise) {
-            tap_code(KC_PGDN);
+            tap_code(KC_1);
         } else {
-            tap_code(KC_PGUP);
+            tap_code(KC_2);
         }
     } else 
     if (index == 1) { /* Second encoder */
         if (clockwise) {
-            tap_code(KC_PGDN);
+            tap_code(KC_3);
         } else {
-            tap_code(KC_PGUP);
+            tap_code(KC_4);
         }
     } else 
-    if (index == 2) { /* Second encoder */
+    if (index == 2) { /* Third encoder */
         if (clockwise) {
-            tap_code(KC_PGDN);
+            tap_code(KC_5);
         } else {
-            tap_code(KC_PGUP);
+            tap_code(KC_6);
         }
     }
     return false;

@@ -1,18 +1,45 @@
+#pragma once
+
+// Spi 설정
+// #define USE_SPI
+// #define SPI_DRIVER SPID2
+#define SPI_SCK_PIN GP18
+#define SPI_MOSI_PIN GP19
+#define SPI_MISO_PIN GP16
+#define PMW33XX_CS_PIN GP17 // SPI CS pin.
+
+/* Optional. */
+#define PMW33XX_CPI 1600      // The CPI range is 100-12000, in increments of 100. Defaults to 1600 CPI.
+#define PMW33XX_CLOCK_SPEED 2000000 // Sets the clock speed that the sensor runs at. Defaults to 2000000
+#define MOUSE_EXTENDED_REPORT // Use -32767 to 32767, instead of just -127 to 127.
+// #define POINTING_DEVICE_TASK_THROTTLE_MS 10
+
+/* RP2040 Reset. */
+// #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET
+
 // I2C 설정
-#define USE_I2C
-#define I2C_DRIVER I2CD0
-#define I2C1_SDA_PIN   GP4
-#define I2C1_SCL_PIN   GP5
+// #define USE_I2C
+// #define I2C_DRIVER I2CD0
+// #define I2C1_SDA_PIN   GP4
+// #define I2C1_SCL_PIN   GP5
 
 #define POINTING_DEVICE_DEBUG
 
-//#define I2C1_SCL_PIN   GP5
-//#define I2C1_SDA_PIN   GP4
+// #define I2C1_SCL_PIN   GP5
+// #define I2C1_SDA_PIN   GP4
 
-// 포인팅 장치 설정
-//#define PIMORONI_TRACKBALL_ADDRESS
-//#define POINTING_DEVICE_ENABLE
-//#define POINTING_DEVICE_ROTARY_ENCODER
+// //포인팅 장치 설정
+// #define PIMORONI_TRACKBALL_ADDRESS
+// #define POINTING_DEVICE_ENABLE
+// #define POINTING_DEVICE_ROTARY_ENCODER
 
-#define ENCODER_A_PINS { GP27, GP22, GP20 }
-#define ENCODER_B_PINS { GP28, GP26, GP21 }
+// #define ENCODER_A_PINS { GP27, GP22, GP20 }
+// #define ENCODER_B_PINS { GP28, GP26, GP21 }
+
+// #define MATRIX_ROWS 1
+// #define MATRIX_COLS 4
+
+// #define MATRIX_ROW_PINS { GP6 }
+// #define MATRIX_COL_PINS { GP2, GP3, GP4, GP5 }
+
+// #define DIODE_DIRECTION COL2ROW
