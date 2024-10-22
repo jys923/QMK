@@ -13,6 +13,7 @@
 #define PMW33XX_CLOCK_SPEED 2000000 // Sets the clock speed that the sensor runs at. Defaults to 2000000
 #define MOUSE_EXTENDED_REPORT // Use -32767 to 32767, instead of just -127 to 127.
 // #define POINTING_DEVICE_TASK_THROTTLE_MS 10
+#define POINTING_DEVICE_INVERT_Y
 
 /* RP2040 Reset. */
 // #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET
@@ -24,6 +25,7 @@
 // #define I2C1_SCL_PIN   GP5
 
 #define POINTING_DEVICE_DEBUG
+#define ENCODER_RESOLUTION 2
 
 // #define I2C1_SCL_PIN   GP5
 // #define I2C1_SDA_PIN   GP4
