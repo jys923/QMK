@@ -16,7 +16,9 @@
 #define POINTING_DEVICE_INVERT_Y
 
 /* RP2040 Reset. */
-// #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET
+#define RP2040_BOOTLOADER_DOUBLE_TAP_RESET // Activates the double-tap behavior
+#define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_TIMEOUT 200U // Timeout window in ms in which the double tap can occur.
+//#define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_LED GP25 // Specify a optional status led by GPIO number which blinks when entering the bootloader
 
 // I2C 설정
 // #define USE_I2C
@@ -24,7 +26,7 @@
 // #define I2C1_SDA_PIN   GP4
 // #define I2C1_SCL_PIN   GP5
 
-#define POINTING_DEVICE_DEBUG
+//#define POINTING_DEVICE_DEBUG
 #define ENCODER_RESOLUTION 2
 
 // #define I2C1_SCL_PIN   GP5
@@ -45,3 +47,8 @@
 // #define MATRIX_COL_PINS { GP2, GP3, GP4, GP5 }
 
 // #define DIODE_DIRECTION COL2ROW
+
+#define WS2812_PIO_USE_PIO2
+#define WS2812_DI_PIN GP14 //GP15
+//#define WS2812_LED_COUNT 10
+#define RGBLIGHT_LED_COUNT 10
