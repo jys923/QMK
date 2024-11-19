@@ -4,6 +4,7 @@
 #include QMK_KEYBOARD_H
 
 #include "print.h"
+#include "raw_hid.h"
 
 // LED 상태를 저장할 배열
 bool led_state[RGBLIGHT_LED_COUNT] = {false};
@@ -58,7 +59,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * │ 1 │ 2 │ 3 │   │
      * └───┴───┴───┴───┘
      */
-    [0] = LAYOUT_numpad_5x4(
+    [0] = LAYOUT_numpad_2x4(
         D_3,  D_4,  D_5,   D_6,
         KC_F10,  QK_MOUSE_BUTTON_1,   QK_MOUSE_BUTTON_2,   KC_F11
     ),
@@ -74,123 +75,93 @@ void keyboard_post_init_user(void) {
     #ifdef CONSOLE_ENABLE
         uprintf("keyboard_pre_init_user!\n");
     #endif 
-    debug_enable = true;
-    debug_matrix = true;
+    //debug_enable = true;
+    //debug_matrix = true;
+    //debug_keyboard = true;
     //debug_mouse = true;
-
-    for (uint8_t i = 0; i < RGBLIGHT_LED_COUNT; i++) { 
-        rgblight_setrgb_at(0, 0, 0, i); 
-    } 
+    //serial_init();
+    //serial_flush();
+    rgblight_setrgb(0, 0, 0);
 }
 
-// void matrix_init_user(void) { 
-// }
+void matrix_init_user(void) { 
+    //rgblight_setrgb(0, 0, 0);
+}
 
 // void matrix_scan_user(void) {
 
 // }
 
+void turn_off_all_leds(void) {
+    for (uint8_t i = 0; i < 4; i++) {
+        rgblight_setrgb_at(0, 0, 0, i);
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    bool result = true; // 기본 리턴 값 설정
+
 #ifdef CONSOLE_ENABLE
     uprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
 #endif 
+
     switch (keycode) {
         case CTRL_C:
             if (record->event.pressed) {
-                // Ctrl + C 누르기
-                register_code(KC_LCTL);
-                tap_code(KC_C);
-            } else {
-                // Ctrl + C 떼기
-                unregister_code(KC_LCTL);
+                tap_code16(C(KC_C));
             }
-            return false;
+            result = false;
             break;
         case CTRL_V:
             if (record->event.pressed) {
-                register_code(KC_LCTL);
-                tap_code(KC_V);
-            } else {
-                unregister_code(KC_LCTL);
+                tap_code16(C(KC_V));
             }
-            return false;
+            result = false;
             break;
         case D_3:
             if (record->event.pressed) {
-                register_code(KC_LCTL);
-                tap_code(KC_F3);
-                for (uint8_t i = 0; i < 4; i++) {
-                    if (i == 0) {
-                        rgblight_setrgb_at(255, 0, 0, i); // 키가 눌렸을 때 해당 LED 켜기
-                    } else {
-                        rgblight_setrgb_at(0, 0, 0, i); // 나머지 LED 끄기
-                    }
-                }
-            } else {
-                unregister_code(KC_LCTL);
+                tap_code16(C(KC_F3));
+                turn_off_all_leds();
+                rgblight_setrgb_at(255, 0, 0, 0);
             }
-            return false;
+            result = false;
             break;
         case D_4:
             if (record->event.pressed) {
-                register_code(KC_LCTL);
-                tap_code(KC_F4);
-                for (uint8_t i = 0; i < 4; i++) {
-                    if (i == 1) {
-                        rgblight_setrgb_at(255, 0, 0, i); // 키가 눌렸을 때 해당 LED 켜기
-                    } else {
-                        rgblight_setrgb_at(0, 0, 0, i); // 나머지 LED 끄기
-                    }
-                }
-            } else {
-                unregister_code(KC_LCTL);
+                tap_code16(C(KC_F4));
+                turn_off_all_leds();
+                rgblight_setrgb_at(255, 0, 0, 1);
             }
-            return false;
+            result = false;
             break;
         case D_5:
             if (record->event.pressed) {
-                register_code(KC_LCTL);
-                tap_code(KC_F5);
-                for (uint8_t i = 0; i < 4; i++) {
-                    if (i == 2) {
-                        rgblight_setrgb_at(255, 0, 0, i); // 키가 눌렸을 때 해당 LED 켜기
-                    } else {
-                        rgblight_setrgb_at(0, 0, 0, i); // 나머지 LED 끄기
-                    }
-                }
-            } else {
-                unregister_code(KC_LCTL);
+                tap_code16(C(KC_F5));
+                turn_off_all_leds();
+                rgblight_setrgb_at(255, 0, 0, 2);
             }
-            return false;
+            result = false;
             break;
         case D_6:
             if (record->event.pressed) {
-                register_code(KC_LCTL);
-                tap_code(KC_F6);
-                for (uint8_t i = 0; i < 4; i++) {
-                    if (i == 3) {
-                        rgblight_setrgb_at(255, 0, 0, i); // 키가 눌렸을 때 해당 LED 켜기
-                    } else {
-                        rgblight_setrgb_at(0, 0, 0, i); // 나머지 LED 끄기
-                    }
-                }
-            } else {
-                unregister_code(KC_LCTL);
+                tap_code16(C(KC_F6));
+                turn_off_all_leds();
+                rgblight_setrgb_at(255, 0, 0, 3);
             }
-            return false;
+            result = false;
             break;
         case KC_F10:
             if (record->event.pressed) {
                 bool current_state = get_led_state(4);
                 if (current_state) {
-                    update_led_state(0, 0, 0, 4);  // LED 끄기
+                    update_led_state(0, 0, 0, 4);
                 } else {
-                    update_led_state(0, 255, 0, 4);  // LED 켜기 (빨간색)
+                    update_led_state(0, 255, 0, 4);
                 }
             } else {
                 tap_code(KC_F10);
             }
-            return false;
+            result = false;
             break;
         case QK_MOUSE_BUTTON_1:
             if (record->event.pressed) {
@@ -199,7 +170,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 tap_code(QK_MOUSE_BUTTON_1);
                 rgblight_setrgb_at(0, 0, 0, 5);
             }
-            return false;
+            result = false;
             break;
         case QK_MOUSE_BUTTON_2:
             if (record->event.pressed) {
@@ -208,7 +179,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 tap_code(QK_MOUSE_BUTTON_2);
                 rgblight_setrgb_at(0, 0, 0, 6);
             }
-            return false;
+            result = false;
             break;
         case KC_F11:
             if (record->event.pressed) {
@@ -217,48 +188,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 tap_code(KC_F11);
                 rgblight_setrgb_at(0, 0, 0, 7);
             }
-            return false;
-            break;
-        case G_PLUS:
-            if (record->event.pressed) {
-                register_code(KC_G);
-                tap_code(KC_EQUAL);
-            } else {
-                unregister_code(KC_G);
-            }
-            return false;
-            break;
-        case G_MINUS:
-            if (record->event.pressed){
-                register_code(KC_G);
-                tap_code(KC_MINUS);
-            } else {
-                unregister_code(KC_G);
-            }
-            return false;
-            break;
-        case R_PLUS:
-            if (record->event.pressed){
-                register_code(KC_R);
-                tap_code(KC_EQUAL);
-            } else {
-                unregister_code(KC_R);
-            }
-            return false;
-            break;
-        case R_MINUS:
-            if (record->event.pressed){
-                register_code(KC_R);
-                tap_code(KC_MINUS);
-            } else {
-                unregister_code(KC_R);
-            }
-            return false;
+            result = false;
             break;
         default:
-            return true;
+            result = true;
+            break;
     }
-    return true;
+    return result;
 }
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
@@ -302,6 +238,52 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 
     return false;
 }
+
+// led_state 배열 값을 사용하여 RGB 조명을 설정하는 함수
+void update_leds_based_on_state(bool led_state[], uint8_t length) {
+    for (uint8_t i = 0; i < length; i++) {
+        if (led_state[i]) {
+            rgblight_setrgb_at(255, 0, 0, i); // 예: LED 켜기 (빨강색)
+        } else {
+            rgblight_setrgb_at(0, 0, 0, i); // 예: LED 끄기
+        }
+    }
+}
+
+void raw_hid_receive(uint8_t *data, uint8_t length) {
+    uprintf("raw_hid_receive!\n");
+
+    // 받은 데이터 출력
+    for (uint8_t i = 0; i < length; i++) {
+        uprintf("%02X ", data[i]);
+    }
+    uprintf("\n");
+
+    // 받은 데이터를 뒤집어서 응답 데이터 생성
+    uint8_t response[length];
+    for (uint8_t i = 0; i < length; i++) {
+        response[i] = data[length - 1 - i];
+    }
+
+    // 뒤집어진 데이터 출력
+    uprintf("response data:\n");
+    for (uint8_t i = 0; i < length; i++) {
+        uprintf("%02X ", response[i]);
+    }
+    uprintf("\n");
+
+    // 뒤집어진 데이터 전송
+    raw_hid_send(response, length);
+
+    // 받은 데이터를 led_state 배열에 설정
+    for (uint8_t i = 0; i < 10 && i < length; i++) {
+        led_state[i] = data[i] ? true : false;
+    }
+
+    // led_state 배열 값에 따라 RGB 조명 설정
+    update_leds_based_on_state(led_state, 10);
+}
+
 
 void housekeeping_task_user(void) {
     check_and_turn_off_leds(8);
