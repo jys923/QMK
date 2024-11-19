@@ -5,6 +5,10 @@
 
 #include "print.h"
 #include "raw_hid.h"
+#include "color.h"
+#include "rgblight.h"
+
+#define BRIGHTNESS_STEP 10
 
 // LED 상태를 저장할 배열
 uint8_t led_state[RGBLIGHT_LED_COUNT] = {0};
@@ -13,6 +17,10 @@ uint16_t led_timer[RGBLIGHT_LED_COUNT] = {0};
 
 uint8_t get_led_state(uint8_t index) {
     return led_state[index];
+}
+
+void set_led_state(uint8_t led, uint8_t index) {
+    led_state[index] = led;
 }
 
 void update_led_state(uint8_t r, uint8_t g, uint8_t b,uint8_t index) {
@@ -28,7 +36,8 @@ void update_led_state(uint8_t r, uint8_t g, uint8_t b,uint8_t index) {
 
 void check_and_turn_off_leds(uint8_t index) {
     if (led_state[index] && timer_elapsed(led_timer[index]) > 500) { // 500ms 후에 LED 끄기
-        update_led_state(0, 0, 0, index);
+        //update_led_state(0, 0, 0, index);
+        rgblight_setrgb_at(0, 0, 0, index);
     }
 }
 
@@ -100,18 +109,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #endif 
 
     switch (keycode) {
-        case CTRL_C:
-            if (record->event.pressed) {
-                tap_code16(C(KC_C));
-            }
-            result = false;
-            break;
-        case CTRL_V:
-            if (record->event.pressed) {
-                tap_code16(C(KC_V));
-            }
-            result = false;
-            break;
         case D_3:
             if (record->event.pressed) {
                 tap_code16(C(KC_F3));
@@ -153,7 +150,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 } else {
                     update_led_state(0, 255, 0, 4);
                 }
-            } else {
                 tap_code(KC_F10);
             }
             result = false;
@@ -179,8 +175,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_F11:
             if (record->event.pressed) {
                 rgblight_setrgb_at(0, 255, 0, 7);
-            } else {
                 tap_code(KC_F11);
+            } else {
                 rgblight_setrgb_at(0, 0, 0, 7);
             }
             result = false;
@@ -193,32 +189,48 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
-    if (index == 0) { /* First encoder */
+    if (index == 0) {
+        uint8_t current_state = get_led_state(8);
+        uprintf("Current state of LED 8: %u\n", current_state);
         if (clockwise) {
-            register_code(KC_LCTL);
-            tap_code(KC_F9);
-            unregister_code(KC_LCTL);
-            update_led_state(255, 255, 0, 8);
+            if (current_state <= 255 - BRIGHTNESS_STEP) {
+                current_state += BRIGHTNESS_STEP;
+            } else {
+                current_state = 255;
+            }
+            tap_code16(C(KC_F9));
         } else {
-            register_code(KC_LSFT);
-            tap_code(KC_F9);
-            unregister_code(KC_LSFT);
-            update_led_state(0, 255, 255, 8);
+            if (current_state >= BRIGHTNESS_STEP) {
+                current_state -= BRIGHTNESS_STEP;
+            } else {
+                current_state = 0;
+            }
+            tap_code16(S(KC_F9));
         }
+        set_led_state(current_state, 8);
+        rgblight_setrgb_at(current_state, current_state, 0, 8);
         led_timer[8] = timer_read(); // 타이머 리셋
     } else 
-    if (index == 2) { /* Second encoder */
+    if (index == 2) {
+        uint8_t current_state = get_led_state(9);
+        uprintf("Current state of LED 9: %u\n", current_state);
         if (clockwise) {
-            register_code(KC_LCTL);
-            tap_code(KC_F12);
-            unregister_code(KC_LCTL);
-            update_led_state(255, 255, 0, 9);
+            if (current_state <= 255 - BRIGHTNESS_STEP) {
+                current_state += BRIGHTNESS_STEP;
+            } else {
+                current_state = 255;
+            }
+            tap_code16(C(KC_F12));
         } else {
-            register_code(KC_LSFT);
-            tap_code(KC_F12);
-            unregister_code(KC_LSFT);
-            update_led_state(0, 255, 255, 9);
+            if (current_state >= BRIGHTNESS_STEP) {
+                current_state -= BRIGHTNESS_STEP;
+            } else {
+                current_state = 0;
+            }
+            tap_code16(S(KC_F12));
         }
+        set_led_state(current_state, 9);
+        rgblight_setrgb_at(0, current_state, current_state, 9);
         led_timer[9] = timer_read(); // 타이머 리셋
     } else 
     if (index == 1) { /* Third encoder */
@@ -233,15 +245,22 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 }
 
 // led_state 배열 값을 사용하여 RGB 조명을 설정하는 함수
-void update_leds_based_on_state(uint8_t led_state[], uint8_t length) {
-    for (uint8_t i = 0; i < length; i++) {
-        if (led_state[i]) {
-            rgblight_setrgb_at(255, 0, 0, i); // 예: LED 켜기 (빨강색)
-        } else {
-            rgblight_setrgb_at(0, 0, 0, i); // 예: LED 끄기
-        }
+// void update_leds_based_on_state(uint8_t led_state[], uint8_t length) {
+//     for (uint8_t i = 0; i < length; i++) {
+//         if (led_state[i]) {
+//             rgblight_setrgb_at(255, 0, 0, i); // 예: LED 켜기 (빨강색)
+//         } else {
+//             rgblight_setrgb_at(0, 0, 0, i); // 예: LED 끄기
+//         }
+//     }
+// }
+
+void update_leds_based_on_state(void) {
+    for (uint8_t i = 0; i < RGBLIGHT_LED_COUNT; i++) {
+        rgblight_setrgb_at(0, 0, led_state[i], i); // 예: LED 켜기 (빨강색)
     }
 }
+
 
 void raw_hid_receive(uint8_t *data, uint8_t length) {
     uprintf("raw_hid_receive!\n");
@@ -258,25 +277,21 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
         response[i] = data[length - 1 - i];
     }
 
-    // 뒤집어진 데이터 출력
-    uprintf("response data:\n");
-    for (uint8_t i = 0; i < length; i++) {
-        uprintf("%02X ", response[i]);
-    }
-    uprintf("\n");
-
-    // 뒤집어진 데이터 전송
-    raw_hid_send(response, length);
-
     // 받은 데이터를 led_state 배열에 설정
     for (uint8_t i = 0; i < RGBLIGHT_LED_COUNT && i < length; i++) {
         led_state[i] = data[i];
     }
 
-    // led_state 배열 값에 따라 RGB 조명 설정
-    update_leds_based_on_state(led_state, RGBLIGHT_LED_COUNT);
+    uprintf("led_state:\n");
+    for (uint8_t i = 0; i < RGBLIGHT_LED_COUNT; i++) {
+        uprintf("%02X ", led_state[i]);
+    }
+    uprintf("\n");
+    // update_leds_based_on_state(led_state, RGBLIGHT_LED_COUNT);
+    update_leds_based_on_state();
+    
+    raw_hid_send(response, length);
 }
-
 
 void housekeeping_task_user(void) {
     check_and_turn_off_leds(8);
