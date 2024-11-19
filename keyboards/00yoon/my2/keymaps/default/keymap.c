@@ -143,6 +143,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             break;
         case KC_F10:
             if (record->event.pressed) {
+                tap_code(KC_F10);
                 uint8_t current_state = get_led_state(4);
                 uprintf("KL: current_state: %u\n",current_state);
                 if (current_state > 0) {
@@ -150,32 +151,31 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 } else {
                     update_led_state(0, 255, 0, 4);
                 }
-                tap_code(KC_F10);
             }
             result = false;
             break;
         case QK_MOUSE_BUTTON_1:
             if (record->event.pressed) {
+                tap_code(QK_MOUSE_BUTTON_1);
                 rgblight_setrgb_at(0, 0, 255, 5);
             } else {
-                tap_code(QK_MOUSE_BUTTON_1);
                 rgblight_setrgb_at(0, 0, 0, 5);
             }
             result = false;
             break;
         case QK_MOUSE_BUTTON_2:
             if (record->event.pressed) {
+                tap_code(QK_MOUSE_BUTTON_2);
                 rgblight_setrgb_at(0, 0, 255, 6);
             } else {
-                tap_code(QK_MOUSE_BUTTON_2);
                 rgblight_setrgb_at(0, 0, 0, 6);
             }
             result = false;
             break;
         case KC_F11:
             if (record->event.pressed) {
-                rgblight_setrgb_at(0, 255, 0, 7);
                 tap_code(KC_F11);
+                rgblight_setrgb_at(0, 255, 0, 7);
             } else {
                 rgblight_setrgb_at(0, 0, 0, 7);
             }
@@ -193,19 +193,19 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
         uint8_t current_state = get_led_state(8);
         uprintf("Current state of LED 8: %u\n", current_state);
         if (clockwise) {
+            tap_code16(C(KC_F9));
             if (current_state <= 255 - BRIGHTNESS_STEP) {
                 current_state += BRIGHTNESS_STEP;
             } else {
                 current_state = 255;
             }
-            tap_code16(C(KC_F9));
         } else {
+            tap_code16(S(KC_F9));
             if (current_state >= BRIGHTNESS_STEP) {
                 current_state -= BRIGHTNESS_STEP;
             } else {
                 current_state = 0;
             }
-            tap_code16(S(KC_F9));
         }
         set_led_state(current_state, 8);
         rgblight_setrgb_at(current_state, current_state, 0, 8);
@@ -215,19 +215,19 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
         uint8_t current_state = get_led_state(9);
         uprintf("Current state of LED 9: %u\n", current_state);
         if (clockwise) {
+            tap_code16(C(KC_F12));
             if (current_state <= 255 - BRIGHTNESS_STEP) {
                 current_state += BRIGHTNESS_STEP;
             } else {
                 current_state = 255;
             }
-            tap_code16(C(KC_F12));
         } else {
+            tap_code16(S(KC_F12));
             if (current_state >= BRIGHTNESS_STEP) {
                 current_state -= BRIGHTNESS_STEP;
             } else {
                 current_state = 0;
             }
-            tap_code16(S(KC_F12));
         }
         set_led_state(current_state, 9);
         rgblight_setrgb_at(0, current_state, current_state, 9);
