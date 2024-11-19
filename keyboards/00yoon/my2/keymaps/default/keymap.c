@@ -7,20 +7,20 @@
 #include "raw_hid.h"
 
 // LED 상태를 저장할 배열
-bool led_state[RGBLIGHT_LED_COUNT] = {false};
+uint8_t led_state[RGBLIGHT_LED_COUNT] = {0};
 // LED 타이머 배열
 uint16_t led_timer[RGBLIGHT_LED_COUNT] = {0};
 
-bool get_led_state(uint8_t index) {
+uint8_t get_led_state(uint8_t index) {
     return led_state[index];
 }
 
 void update_led_state(uint8_t r, uint8_t g, uint8_t b,uint8_t index) {
     // LED 상태 저장
     if (r > 0 || g > 0 || b > 0) {
-        led_state[index] = true;
+        led_state[index] = 255;
     } else {
-        led_state[index] = false;
+        led_state[index] = 0;
     }
     // LED 색상 설정
     rgblight_setrgb_at(r, g, b, index);
@@ -28,14 +28,8 @@ void update_led_state(uint8_t r, uint8_t g, uint8_t b,uint8_t index) {
 
 void check_and_turn_off_leds(uint8_t index) {
     if (led_state[index] && timer_elapsed(led_timer[index]) > 500) { // 500ms 후에 LED 끄기
-        update_led_state(0, 0, 0,index);
+        update_led_state(0, 0, 0, index);
     }
-}
-
-// 일정 시간 후에 LED를 끄는 함수
-void turn_off_led_after_delay(uint16_t delay, uint8_t index) {
-    wait_ms(delay);
-    update_led_state(0, 0, 0,index);
 }
 
 enum custom_keycodes {
@@ -152,8 +146,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             break;
         case KC_F10:
             if (record->event.pressed) {
-                bool current_state = get_led_state(4);
-                if (current_state) {
+                uint8_t current_state = get_led_state(4);
+                uprintf("KL: current_state: %u\n",current_state);
+                if (current_state > 0) {
                     update_led_state(0, 0, 0, 4);
                 } else {
                     update_led_state(0, 255, 0, 4);
@@ -210,7 +205,6 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
             unregister_code(KC_LSFT);
             update_led_state(0, 255, 255, 8);
         }
-        //turn_off_led_after_delay(500, 8);
         led_timer[8] = timer_read(); // 타이머 리셋
     } else 
     if (index == 2) { /* Second encoder */
@@ -225,7 +219,6 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
             unregister_code(KC_LSFT);
             update_led_state(0, 255, 255, 9);
         }
-        //turn_off_led_after_delay(500, 9);
         led_timer[9] = timer_read(); // 타이머 리셋
     } else 
     if (index == 1) { /* Third encoder */
@@ -240,7 +233,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 }
 
 // led_state 배열 값을 사용하여 RGB 조명을 설정하는 함수
-void update_leds_based_on_state(bool led_state[], uint8_t length) {
+void update_leds_based_on_state(uint8_t led_state[], uint8_t length) {
     for (uint8_t i = 0; i < length; i++) {
         if (led_state[i]) {
             rgblight_setrgb_at(255, 0, 0, i); // 예: LED 켜기 (빨강색)
@@ -276,12 +269,12 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
     raw_hid_send(response, length);
 
     // 받은 데이터를 led_state 배열에 설정
-    for (uint8_t i = 0; i < 10 && i < length; i++) {
-        led_state[i] = data[i] ? true : false;
+    for (uint8_t i = 0; i < RGBLIGHT_LED_COUNT && i < length; i++) {
+        led_state[i] = data[i];
     }
 
     // led_state 배열 값에 따라 RGB 조명 설정
-    update_leds_based_on_state(led_state, 10);
+    update_leds_based_on_state(led_state, RGBLIGHT_LED_COUNT);
 }
 
 
