@@ -1,13 +1,13 @@
 #pragma once
 
-// /* LED 매트릭스 핀 설정 */
-// #define LED_MATRIX_COLS 4
-// #define LED_MATRIX_ROWS 3
+/* LED 매트릭스 핀 설정 */
+#define LED_MATRIX_COLS 4
+#define LED_MATRIX_ROWS 3
 
-// // 열 핀
-// #define LED_COL_PINS { GP7, GP8, GP9, GP10 }
-// // 행 핀
-// #define LED_ROW_PINS { GP11, GP12, GP13 }
+// 열 핀
+#define LED_COL_PINS { GP7, GP8, GP9, GP10 }
+// 행 핀
+#define LED_ROW_PINS { GP11, GP12, GP13 }
 
 // #define CONSOLE_ENABLE
 // #define COMMAND_ENABLE
@@ -61,7 +61,7 @@
 // #define DIODE_DIRECTION COL2ROW
 
 #define WS2812_PIO_USE_PIO2
-#define WS2812_DI_PIN GP14 //GP15
+#define WS2812_DI_PIN GP15
 //#define WS2812_LED_COUNT 10
 #define RGBLIGHT_LED_COUNT 20
 #define RGBLIGHT_LED_MAP { \

@@ -2,10 +2,9 @@
     "manufacturer": "endolfin",
     "keyboard_name": "sonocap2/controller",
     "maintainer": "yoon",
-    "bootloader": "rp2040",
     "diode_direction": "COL2ROW",
     "matrix_pins": {
-        "cols": ["G02", "GP1", "GP2", "GP3"],
+        "cols": ["GP0", "GP1", "GP2", "GP3"],
         "rows": ["GP4", "GP5"]//, "GP6"]
     },
     "encoder": {
@@ -15,7 +14,6 @@
             {"pin_a": "GP20", "pin_b": "GP21"}
         ]
     },
-    "processor": "RP2040",
     "url": "",
     "usb": {
         "device_version": "1.0.0",
