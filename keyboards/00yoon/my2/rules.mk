@@ -34,3 +34,5 @@ RGBLIGHT_ENABLE = yes
 # SERIAL_DRIVER = vendor
 
 RAW_ENABLE = yes
+
+# CUSTOM_MATRIX = yes

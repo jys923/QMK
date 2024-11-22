@@ -1,5 +1,14 @@
 #pragma once
 
+// /* LED 매트릭스 핀 설정 */
+// #define LED_MATRIX_COLS 4
+// #define LED_MATRIX_ROWS 3
+
+// // 열 핀
+// #define LED_COL_PINS { GP7, GP8, GP9, GP10 }
+// // 행 핀
+// #define LED_ROW_PINS { GP11, GP12, GP13 }
+
 // #define CONSOLE_ENABLE
 // #define COMMAND_ENABLE
 

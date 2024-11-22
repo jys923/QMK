@@ -10,6 +10,17 @@
 
 #define BRIGHTNESS_STEP 10
 
+// 행 및 열 핀 배열 정의
+uint8_t row_pins[LED_MATRIX_ROWS] = LED_ROW_PINS;
+uint8_t col_pins[LED_MATRIX_COLS] = LED_COL_PINS;
+
+// LED 상태 배열 (1: 켜짐, 0: 꺼짐)
+uint8_t led_matrix[LED_MATRIX_ROWS][LED_MATRIX_COLS] = {
+    {1, 1, 1, 1},
+    {1, 0, 0, 1},
+    {0, 1, 0, 0}
+};
+
 // LED 상태를 저장할 배열
 uint8_t led_state[RGBLIGHT_LED_COUNT] = {0};
 // LED 타이머 배열
@@ -63,8 +74,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * └───┴───┴───┴───┘
      */
     [0] = LAYOUT_numpad_2x4(
-        D_3,  D_4,  D_5,   D_6,
-        KC_F10,  QK_MOUSE_BUTTON_1,   QK_MOUSE_BUTTON_2,   KC_F11
+        D_3, D_4, D_5, D_6,
+        KC_F10, QK_MOUSE_BUTTON_1, QK_MOUSE_BUTTON_2, KC_F11
     ),
 };
 
@@ -85,15 +96,41 @@ void keyboard_post_init_user(void) {
     //serial_init();
     //serial_flush();
     rgblight_setrgb(0, 0, 0);
+    for (uint8_t x = 0; x < LED_MATRIX_ROWS; x++) {
+        setPinOutput(row_pins[x]);
+    }
+    for (uint8_t y = 0; y < LED_MATRIX_COLS; y++) {
+        setPinOutput(col_pins[y]);
+    }
 }
 
-void matrix_init_user(void) { 
-    //rgblight_setrgb(0, 0, 0);
-}
 
-// void matrix_scan_user(void) {
-
+// void matrix_init_kb(void) { 
+// void matrix_init_user(void) { 
+//     rgblight_setrgb(0, 0, 0);
+//     for (uint8_t x = 0; x < LED_MATRIX_ROWS; x++) {
+//         setPinOutput(row_pins[x]);
+//     }
+//     for (uint8_t y = 0; y < LED_MATRIX_COLS; y++) {
+//         setPinOutput(col_pins[y]);
+//     }
 // }
+
+void matrix_scan_user(void) {
+    // 매트릭스 업데이트
+    for (uint8_t x = 0; x < LED_MATRIX_ROWS; x++) {
+        writePinLow(row_pins[x]); // 현재 행 활성화 (LOW)
+        for (uint8_t y = 0; y < LED_MATRIX_COLS; y++) {
+            if (led_matrix[x][y] == 1) {
+                writePinHigh(col_pins[y]); // 열 핀 활성화 (HIGH) -> LED 켜짐
+            } else {
+                writePinLow(col_pins[y]); // 열 핀 비활성화 (LOW) -> LED 꺼짐
+            }
+        }
+        //wait_us(100); // 짧은 지연 시간
+        writePinHigh(row_pins[x]); // 현재 행 비활성화 (HIGH)
+    }
+}
 
 void turn_off_all_leds(void) {
     for (uint8_t i = 0; i < 4; i++) {
