@@ -18,14 +18,20 @@
 
 #include_next "mcuconf.h"
 
-// #undef RP_I2C_USE_I2C0 
-// #define RP_I2C_USE_I2C0 TRUE
+#undef RP_I2C_USE_I2C0 
+#define RP_I2C_USE_I2C0 FALSE
 
-// #undef RP_I2C_USE_I2C1 
-// #define RP_I2C_USE_I2C1 FALSE
+#undef RP_I2C_USE_I2C1 
+#define RP_I2C_USE_I2C1 TRUE
 
 #undef RP_SPI_USE_SPI0
 #define RP_SPI_USE_SPI0 TRUE
 
 #undef RP_SPI_USE_SPI1
 #define RP_SPI_USE_SPI1 FALSE
+
+// #undef STM32_SPI_USE_SPI2
+// #define STM32_SPI_USE_SPI2 TRUE
+
+// #undef STM32_PWM_USE_TIM2
+// #define STM32_PWM_USE_TIM2 TRUE

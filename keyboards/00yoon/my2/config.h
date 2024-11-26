@@ -1,14 +1,5 @@
 #pragma once
 
-/* LED 매트릭스 핀 설정 */
-#define LED_MATRIX_COLS 4
-#define LED_MATRIX_ROWS 3
-
-// 열 핀
-#define LED_COL_PINS { GP7, GP8, GP9, GP10 }
-// 행 핀
-#define LED_ROW_PINS { GP11, GP12, GP13 }
-
 // #define CONSOLE_ENABLE
 // #define COMMAND_ENABLE
 
@@ -28,15 +19,15 @@
 #define POINTING_DEVICE_INVERT_Y
 
 /* RP2040 Reset. */
-#define RP2040_BOOTLOADER_DOUBLE_TAP_RESET // Activates the double-tap behavior
-#define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_TIMEOUT 200U // Timeout window in ms in which the double tap can occur.
+// #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET // Activates the double-tap behavior
+// #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_TIMEOUT 200U // Timeout window in ms in which the double tap can occur.
 //#define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_LED GP25 // Specify a optional status led by GPIO number which blinks when entering the bootloader
 
 // I2C 설정
-// #define USE_I2C
-// #define I2C_DRIVER I2CD0
-// #define I2C1_SDA_PIN   GP4
-// #define I2C1_SCL_PIN   GP5
+#define USE_I2C
+#define I2C_DRIVER I2CD1
+#define I2C1_SDA_PIN   GP6
+#define I2C1_SCL_PIN   GP7
 
 //#define POINTING_DEVICE_DEBUG
 #define ENCODER_RESOLUTION 2
@@ -60,17 +51,17 @@
 
 // #define DIODE_DIRECTION COL2ROW
 
-#define WS2812_PIO_USE_PIO2
-#define WS2812_DI_PIN GP15
+//#define WS2812_PIO_USE_PIO2
+//#define WS2812_DI_PIN GP15
 //#define WS2812_LED_COUNT 10
-#define RGBLIGHT_LED_COUNT 20
-#define RGBLIGHT_LED_MAP { \
-    0,  1,  2,  3, \
-    7,  6,  5,  4, \
-    8,  9,  10, 11, \
-    15, 14, 13, 12, \
-    16, 17, 18, 19 \
-}
+#define RGBLIGHT_LED_COUNT 117
+// #define RGBLIGHT_LED_MAP { \
+//     0,  1,  2,  3, \
+//     7,  6,  5,  4, \
+//     8,  9,  10, 11, \
+//     15, 14, 13, 12, \
+//     16, 17, 18, 19 \
+// }
 
 // #define DEBUG_ENABLE
 // #define DEBUG_PORT USB_SERIAL_PORT
