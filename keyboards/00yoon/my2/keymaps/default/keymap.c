@@ -6,14 +6,16 @@
 #include "print.h"
 #include "raw_hid.h"
 #include "color.h"
-#include "rgblight.h"
+// #include "rgblight.h"
+#include "quantum.h"
+#include "rgb_matrix.h"
 
 #define BRIGHTNESS_STEP 10
 
 // LED 상태를 저장할 배열
-uint8_t led_state[RGBLIGHT_LED_COUNT] = {0};
+uint8_t led_state[20] = {0};
 // LED 타이머 배열
-uint16_t led_timer[RGBLIGHT_LED_COUNT] = {0};
+uint16_t led_timer[20] = {0};
 
 uint8_t get_led_state(uint8_t index) {
     return led_state[index];
@@ -31,13 +33,13 @@ void update_led_state(uint8_t r, uint8_t g, uint8_t b,uint8_t index) {
         led_state[index] = 0;
     }
     // LED 색상 설정
-    rgblight_setrgb_at(r, g, b, index);
+    //rgblight_setrgb_at(r, g, b, index);
 }
 
 void check_and_turn_off_leds(uint8_t index) {
     if (led_state[index] && timer_elapsed(led_timer[index]) > 500) { // 500ms 후에 LED 끄기
         //update_led_state(0, 0, 0, index);
-        rgblight_setrgb_at(0, 0, 0, index);
+        //rgblight_setrgb_at(0, 0, 0, index);
     }
 }
 
@@ -84,7 +86,9 @@ void keyboard_post_init_user(void) {
     //debug_mouse = true;
     //serial_init();
     //serial_flush();
-    rgblight_setrgb(255, 255, 255);
+    // rgblight_setrgb(255, 255, 255);
+    rgb_matrix_set_color(0, 0xff, 0xff, 0x00);
+
 }
 
 
@@ -97,7 +101,7 @@ void matrix_scan_user(void) {
 
 void turn_off_all_leds(void) {
     for (uint8_t i = 0; i < 4; i++) {
-        rgblight_setrgb_at(0, 0, 0, i);
+        //rgblight_setrgb_at(0, 0, 0, i);
     }
 }
 
@@ -113,7 +117,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 tap_code16(C(KC_F3));
                 turn_off_all_leds();
-                rgblight_setrgb_at(255, 0, 0, 0);
+                // rgblight_setrgb_at(255, 0, 0, 0);
             }
             result = false;
             break;
@@ -121,7 +125,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 tap_code16(C(KC_F4));
                 turn_off_all_leds();
-                rgblight_setrgb_at(255, 0, 0, 1);
+                // rgblight_setrgb_at(255, 0, 0, 1);
             }
             result = false;
             break;
@@ -129,7 +133,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 tap_code16(C(KC_F5));
                 turn_off_all_leds();
-                rgblight_setrgb_at(255, 0, 0, 2);
+                // rgblight_setrgb_at(255, 0, 0, 2);
             }
             result = false;
             break;
@@ -137,7 +141,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 tap_code16(C(KC_F6));
                 turn_off_all_leds();
-                rgblight_setrgb_at(255, 0, 0, 3);
+                // rgblight_setrgb_at(255, 0, 0, 3);
             }
             result = false;
             break;
@@ -157,27 +161,27 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case QK_MOUSE_BUTTON_1:
             if (record->event.pressed) {
                 tap_code(QK_MOUSE_BUTTON_1);
-                rgblight_setrgb_at(0, 0, 255, 5);
+                // rgblight_setrgb_at(0, 0, 255, 5);
             } else {
-                rgblight_setrgb_at(0, 0, 0, 5);
+                // rgblight_setrgb_at(0, 0, 0, 5);
             }
             result = false;
             break;
         case QK_MOUSE_BUTTON_2:
             if (record->event.pressed) {
                 tap_code(QK_MOUSE_BUTTON_2);
-                rgblight_setrgb_at(0, 0, 255, 6);
+                // rgblight_setrgb_at(0, 0, 255, 6);
             } else {
-                rgblight_setrgb_at(0, 0, 0, 6);
+                // rgblight_setrgb_at(0, 0, 0, 6);
             }
             result = false;
             break;
         case KC_F11:
             if (record->event.pressed) {
                 tap_code(KC_F11);
-                rgblight_setrgb_at(0, 255, 0, 7);
+                // rgblight_setrgb_at(0, 255, 0, 7);
             } else {
-                rgblight_setrgb_at(0, 0, 0, 7);
+                // rgblight_setrgb_at(0, 0, 0, 7);
             }
             result = false;
             break;
@@ -208,7 +212,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
             }
         }
         set_led_state(current_state, 8);
-        rgblight_setrgb_at(current_state, current_state, 0, 8);
+        // rgblight_setrgb_at(current_state, current_state, 0, 8);
         led_timer[8] = timer_read(); // 타이머 리셋
     } else 
     if (index == 2) {
@@ -230,7 +234,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
             }
         }
         set_led_state(current_state, 9);
-        rgblight_setrgb_at(0, current_state, current_state, 9);
+        // rgblight_setrgb_at(0, current_state, current_state, 9);
         led_timer[9] = timer_read(); // 타이머 리셋
     } else 
     if (index == 1) { /* Third encoder */
@@ -256,8 +260,8 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 // }
 
 void update_leds_based_on_state(void) {
-    for (uint8_t i = 0; i < RGBLIGHT_LED_COUNT; i++) {
-        rgblight_setrgb_at(0, 0, led_state[i], i); // 예: LED 켜기 (빨강색)
+    for (uint8_t i = 0; i < RGB_MATRIX_LED_COUNT; i++) {
+        // rgblight_setrgb_at(0, 0, led_state[i], i); // 예: LED 켜기 (빨강색)
     }
 }
 
@@ -278,16 +282,16 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
     }
 
     // 받은 데이터를 led_state 배열에 설정
-    for (uint8_t i = 0; i < RGBLIGHT_LED_COUNT && i < length; i++) {
+    for (uint8_t i = 0; i < RGB_MATRIX_LED_COUNT && i < length; i++) {
         led_state[i] = data[i];
     }
 
     uprintf("led_state:\n");
-    for (uint8_t i = 0; i < RGBLIGHT_LED_COUNT; i++) {
+    for (uint8_t i = 0; i < RGB_MATRIX_LED_COUNT; i++) {
         uprintf("%02X ", led_state[i]);
     }
     uprintf("\n");
-    // update_leds_based_on_state(led_state, RGBLIGHT_LED_COUNT);
+    // update_leds_based_on_state(led_state, RGB_MATRIX_LED_COUNT);
     update_leds_based_on_state();
     
     raw_hid_send(response, length);

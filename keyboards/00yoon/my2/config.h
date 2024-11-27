@@ -54,15 +54,7 @@
 //#define WS2812_PIO_USE_PIO2
 //#define WS2812_DI_PIN GP15
 //#define WS2812_LED_COUNT 10
-#define RGBLIGHT_LED_COUNT 117
-// #define RGBLIGHT_LED_MAP { \
-//     0,  1,  2,  3, \
-//     7,  6,  5,  4, \
-//     8,  9,  10, 11, \
-//     15, 14, 13, 12, \
-//     16, 17, 18, 19 \
-// }
-
+//#define RGBLIGHT_LED_COUNT 20
 // #define DEBUG_ENABLE
 // #define DEBUG_PORT USB_SERIAL_PORT
 
@@ -73,3 +65,8 @@
 
 // #define RAW_USAGE_PAGE 0xFF60
 // #define RAW_USAGE_ID 0x61
+
+// #define RGBLIGHT_LED_COUNT 8
+#define RGB_MATRIX_LED_COUNT 8
+#define IS31FL3741_I2C_ADDRESS_1 0x30
+// #define IS31FL3741_LED_COUNT 63
